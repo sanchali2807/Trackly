@@ -1,0 +1,28 @@
+body {
+  margin: 0;
+  background: #1e1e2f;
+  color: white;
+  font-family: sans-serif;
+}
+
+.board {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.list {
+  background: #2a2a3d;
+  padding: 10px;
+  width: 250px;
+  border-radius: 8px;
+}
+
+.card {
+  background: #3a3a55;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
