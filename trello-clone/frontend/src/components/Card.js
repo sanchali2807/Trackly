@@ -16,7 +16,33 @@ function Card({ card, index }) {
             {...provided.dragHandleProps}
             onClick={() => setOpen(true)}
           >
-            {card.title}
+            <div className="labels">
+              {card.Labels?.map((l) => (
+                <span
+                  key={l.id}
+                  className="label"
+                  style={{ backgroundColor: l.color }}
+                />
+              ))}
+            </div>
+
+            <p className="card-title">{card.title}</p>
+
+            <div className="card-footer">
+              <div className="members">
+                {card.Members?.map((m) => (
+                  <div key={m.id} className="avatar">
+                    {m.name[0]}
+                  </div>
+                ))}
+              </div>
+
+              {card.dueDate && (
+                <span className="due">
+                  📅 {new Date(card.dueDate).toLocaleDateString()}
+                </span>
+              )}
+            </div>
           </div>
         )}
       </Draggable>

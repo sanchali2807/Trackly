@@ -3,20 +3,28 @@ import {
   getBoard,
   reorderLists,
   moveCard,
-  searchCards,   // ✅ ADD THIS
+  searchCards,
 } from "../api/api";
 
-import List from "./List";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
+import List from "./List";
+import Topbar from "./TopBar";
+import Sidebar from "./SideBar";
+import FilterPanel from "./FilterPanel";
 
 function Board() {
   const [board, setBoard] = useState(null);
-  const [search, setSearch] = useState("");
   const [filteredCards, setFilteredCards] = useState(null);
+  const [showFilter, setShowFilter] = useState(false);
 
-  // =========================
-  // FETCH BOARD
-  // =========================
+  const [filters, setFilters] = useState({
+    keyword: "",
+    dueDate: null,
+    label: null,
+    member: null,
+  });
+
+  // FETCH
   const fetchBoard = async () => {
     const res = await getBoard();
     setBoard(res.data);
@@ -26,15 +34,12 @@ function Board() {
     fetchBoard();
   }, []);
 
-  // =========================
-  // DRAG HANDLER
-  // =========================
+  // DRAG
   const handleDragEnd = async (result) => {
     if (!result.destination) return;
 
     const { type, source, destination } = result;
 
-    // LIST DRAG
     if (type === "LIST") {
       const newLists = Array.from(board.Lists);
       const [removed] = newLists.splice(source.index, 1);
@@ -44,7 +49,6 @@ function Board() {
       await reorderLists(newLists);
     }
 
-    // CARD DRAG
     if (type === "CARD") {
       await moveCard({
         cardId: result.draggableId,
@@ -57,12 +61,8 @@ function Board() {
     }
   };
 
-  // =========================
   // SEARCH
-  // =========================
   const handleSearch = async (value) => {
-    setSearch(value);
-
     if (!value) {
       setFilteredCards(null);
       return;
@@ -72,61 +72,102 @@ function Board() {
     setFilteredCards(res.data);
   };
 
+  // FILTER LOGIC
+  const applyFilters = (cards) => {
+    return cards.filter((card) => {
+      if (
+        filters.keyword &&
+        !card.title.toLowerCase().includes(filters.keyword.toLowerCase())
+      )
+        return false;
+
+      if (
+        filters.label &&
+        !card.Labels?.some((l) => l.id === filters.label)
+      )
+        return false;
+
+      if (
+        filters.member &&
+        !card.Members?.some((m) => m.id === filters.member)
+      )
+        return false;
+
+      if (filters.dueDate) {
+        const d1 = new Date(card.dueDate).toDateString();
+        const d2 = new Date(filters.dueDate).toDateString();
+        if (d1 !== d2) return false;
+      }
+
+      return true;
+    });
+  };
+
   if (!board) return <div>Loading...</div>;
 
   return (
-    <>
-      {/* 🔍 SEARCH BAR */}
-      <input
-        placeholder="Search cards..."
-        value={search}
-        onChange={(e) => handleSearch(e.target.value)}
-        style={{
-          margin: "10px",
-          padding: "8px",
-          width: "300px",
-          borderRadius: "6px",
-          border: "none",
-        }}
+    <div className="app">
+      <Topbar
+        onSearch={handleSearch}
+        onOpenFilter={() => setShowFilter(true)}
       />
 
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable
-          droppableId="all-lists"
-          direction="horizontal"
-          type="LIST"
-        >
-          {(provided) => (
-            <div
-              className="board"
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-            >
-              {board.Lists?.map((list, index) => {
-                let cards = list.Cards;
+      <div className="main">
+        <Sidebar />
 
-                // ✅ APPLY SEARCH FILTER
-                if (filteredCards) {
-                  cards = list.Cards.filter((c) =>
-                    filteredCards.some((fc) => fc.id === c.id)
-                  );
-                }
+        <div className="content">
+          <div className="board-header">
+            <h2>{board.title}</h2>
+          </div>
 
-                return (
-                  <List
-                    key={list.id}
-                    list={{ ...list, Cards: cards }}
-                    index={index}
-                  />
-                );
-              })}
+          <div className="board-wrapper">
+            <DragDropContext onDragEnd={handleDragEnd}>
+              <Droppable
+                droppableId="all-lists"
+                direction="horizontal"
+                type="LIST"
+              >
+                {(provided) => (
+                  <div
+                    className="board"
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                  >
+                    {board.Lists?.map((list, index) => {
+                      let cards = list.Cards;
 
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
-    </>
+                      if (filteredCards) {
+                        cards = list.Cards.filter((c) =>
+                          filteredCards.some((fc) => fc.id === c.id)
+                        );
+                      }
+
+                      cards = applyFilters(cards);
+
+                      return (
+                        <List
+                          key={list.id}
+                          list={{ ...list, Cards: cards }}
+                          index={index}
+                        />
+                      );
+                    })}
+
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </div>
+        </div>
+      </div>
+
+      <FilterPanel
+        show={showFilter}
+        onClose={() => setShowFilter(false)}
+        setFilters={setFilters}
+      />
+    </div>
   );
 }
 

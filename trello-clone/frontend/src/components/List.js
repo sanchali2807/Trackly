@@ -1,7 +1,18 @@
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 import Card from "./Card";
+import { createCard } from "../api/api";
 
 function List({ list, index }) {
+  const handleAddCard = async () => {
+    await createCard({
+      title: "New Card",
+      listId: list.id,
+      position: list.Cards.length,
+    });
+
+    window.location.reload(); // quick fix
+  };
+
   return (
     <Draggable draggableId={String(list.id)} index={index}>
       {(provided) => (
@@ -22,6 +33,10 @@ function List({ list, index }) {
               </div>
             )}
           </Droppable>
+
+          <button className="add-card" onClick={handleAddCard}>
+            + Add a card
+          </button>
         </div>
       )}
     </Draggable>
