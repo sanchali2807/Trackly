@@ -12,7 +12,7 @@ function List({ list, index }) {
         >
           <h3 {...provided.dragHandleProps}>{list.title}</h3>
 
-          <Droppable droppableId={String(list.id)} type="card">
+          <Droppable droppableId={String(list.id)} type="CARD">
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
                 {list.Cards?.map((card, i) => (

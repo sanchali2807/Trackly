@@ -21,4 +21,18 @@ export const deleteCard = (id) => API.delete(`/cards/${id}`);
 export const moveCard = (data) => API.put("/cards/move", data);
 export const getCardDetails = (id) => API.get(`/cards/${id}`);
 
+// LABELS
+export const addLabel = (data) =>
+  API.post("/cards/add-label", data);
+
+export const removeLabel = (data) =>
+  API.post("/cards/remove-label", data);
+export const getLabels = () => API.get("/meta/labels");
+
+//SEARCH
+export const searchCards = (query) =>
+  API.get(`/search?query=${query}`);
+
+
+
 export default API;
