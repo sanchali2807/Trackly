@@ -14,7 +14,7 @@ const Card = sequelize.define("Card", {
     allowNull: false,
   },
   dueDate: {
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
   },
 });
 

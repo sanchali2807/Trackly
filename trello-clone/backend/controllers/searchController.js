@@ -16,14 +16,7 @@ exports.searchCards = async (req, res) => {
     }
     // 📅 FILTER BY DUE DATE
 if (dueDate) {
-  const start = new Date(dueDate);
-const end = new Date(dueDate);
-end.setDate(end.getDate() + 1);
-
-whereCondition.dueDate = {
-  [Op.gte]: start,
-  [Op.lt]: end,
-};
+  whereCondition.dueDate = dueDate;
 }
 
     // 🏷️ LABEL FILTER (only if labelId exists)
