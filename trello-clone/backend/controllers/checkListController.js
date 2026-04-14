@@ -1,23 +1,52 @@
 const { ChecklistItem } = require("../models");
 
 exports.addItem = async (req, res) => {
-  const { cardId, text } = req.body;
-  const item = await ChecklistItem.create({ cardId, text });
-  res.json(item);
+  try {
+    const { cardId, text } = req.body;
+
+    if (!cardId || !text) {
+      return res.status(400).json({ error: "cardId and text required" });
+    }
+
+    const item = await ChecklistItem.create({ cardId, text });
+
+    res.json(item);
+  } catch (error) {
+    res.status(500).json({ error: "Server Error" });
+  }
 };
 
 exports.toggleItem = async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  const item = await ChecklistItem.findByPk(id);
-  item.completed = !item.completed;
-  await item.save();
+    const item = await ChecklistItem.findByPk(id);
+    if (!item) {
+      return res.status(404).json({ error: "Item not found" });
+    }
 
-  res.json(item);
+    item.completed = !item.completed;
+    await item.save();
+
+    res.json(item);
+  } catch (error) {
+    res.status(500).json({ error: "Server Error" });
+  }
 };
 
 exports.deleteItem = async (req, res) => {
-  const { id } = req.params;
-  await ChecklistItem.destroy({ where: { id } });
-  res.json({ message: "Deleted" });
+  try {
+    const { id } = req.params;
+
+    const item = await ChecklistItem.findByPk(id);
+    if (!item) {
+      return res.status(404).json({ error: "Item not found" });
+    }
+
+    await item.destroy();
+
+    res.json({ message: "Deleted" });
+  } catch (error) {
+    res.status(500).json({ error: "Server Error" });
+  }
 };

@@ -263,3 +263,48 @@ exports.removeMemberFromCard = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+
+exports.addLabelToCard = async (req, res) => {
+  try {
+    const { cardId, labelId } = req.params;
+
+    const card = await Card.findByPk(cardId);
+    if (!card) {
+      return res.status(404).json({ error: "Card not found" });
+    }
+
+    const label = await Label.findByPk(labelId);
+    if (!label) {
+      return res.status(404).json({ error: "Label not found" });
+    }
+
+    // 🔗 Attach label
+    await card.addLabel(label);
+
+    res.json({ message: "Label added to card" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server Error" });
+  }
+};
+
+exports.removeLabelFromCard = async (req, res) => {
+  try {
+    const { cardId, labelId } = req.params;
+
+    const card = await Card.findByPk(cardId);
+    const label = await Label.findByPk(labelId);
+
+    if (!card || !label) {
+      return res.status(404).json({ error: "Card or Label not found" });
+    }
+
+    await card.removeLabel(label);
+
+    res.json({ message: "Label removed from card" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server Error" });
+  }
+};
