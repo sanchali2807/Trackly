@@ -10,7 +10,7 @@ const CardLabel = require("./CardLabel");
 // =======================
 // BOARD → LIST
 // =======================
-Board.hasMany(List, { foreignKey: "boardId", onDelete: "CASCADE" });
+Board.hasMany(List, { foreignKey: "boardId"});
 List.belongsTo(Board, { foreignKey: "boardId" });
 
 // =======================
