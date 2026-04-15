@@ -12,7 +12,7 @@ const ChecklistItem = sequelize.define("ChecklistItem", {
   },
 },
   {
-    tableName: "CheckListItems",       // ✅ FIXED
+    tableName: "ChecklistItems",       // ✅ FIXED
     freezeTableName: true,    // ✅ prevents pluralization
   }
 );
