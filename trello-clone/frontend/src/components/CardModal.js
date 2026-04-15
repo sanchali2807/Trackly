@@ -31,7 +31,7 @@ const [checklistText, setChecklistText] = useState("");
 
   useEffect(() => {
     fetchCard();
-  }, [fetchCard]);
+  }, []);
 
   const handleUpdate = async () => {
   await updateCard(cardId, {
