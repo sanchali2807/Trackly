@@ -18,11 +18,12 @@ function Board() {
   const [showFilter, setShowFilter] = useState(false);
 
   const [filters, setFilters] = useState({
-    keyword: "",
-    dueDate: null,
-    label: null,
-    member: null,
-  });
+  keyword: "",
+  dueDate: null,     // single
+  labels: [],        // MULTIPLE
+  member: null,      // single
+  status : null
+});
 
   // FETCH
   const fetchBoard = async () => {
@@ -33,6 +34,12 @@ function Board() {
   useEffect(() => {
     fetchBoard();
   }, []);
+
+  useEffect(() => {
+  if (board) {
+    console.log(board.Lists[0].Cards[0]);
+  }
+}, [board]);
 
   // DRAG
   const handleDragEnd = async (result) => {
@@ -74,42 +81,102 @@ function Board() {
 
   // FILTER LOGIC
   const applyFilters = (cards) => {
-    return cards.filter((card) => {
-      if (
-        filters.keyword &&
-        !card.title.toLowerCase().includes(filters.keyword.toLowerCase())
-      )
-        return false;
+  return cards.filter((card) => {
+console.log("CARD:", card.title);
+    console.log("ChecklistItems:", card.ChecklistItems);
+    // KEYWORD
+    if (
+      filters.keyword &&
+      !card.title.toLowerCase().includes(filters.keyword.toLowerCase())
+    )
+      return false;
 
-      if (
-        filters.label &&
-        !card.Labels?.some((l) => l.id === filters.label)
-      )
-        return false;
+    // LABELS (MULTI)
+    if (filters.labels.length > 0) {
+      const hasLabel = card.Labels?.some((l) =>
+        filters.labels.includes(l.id)
+      );
+      if (!hasLabel) return false;
+    }
 
-      if (
-        filters.member &&
-        !card.Members?.some((m) => m.id === filters.member)
-      )
-        return false;
+   // MEMBERS
+   
+if (filters.member === "none") {
+  if (card.Members && card.Members.length > 0) return false;
+}
 
-      if (filters.dueDate) {
-        const d1 = new Date(card.dueDate).toDateString();
-        const d2 = new Date(filters.dueDate).toDateString();
-        if (d1 !== d2) return false;
-      }
+if (filters.member === "me") {
+  const myId = 1; // Alice id for now
 
-      return true;
-    });
-  };
+  if (!card.Members || card.Members.length === 0) return false;
 
+  const assigned = card.Members.some((m) => m.id === myId);
+  if (!assigned) return false;
+}
+
+   // DUE DATE
+if (filters.dueDate) {
+  const now = new Date();
+
+  // ✅ Case 1: No dates
+  if (filters.dueDate === "none") {
+    if (card.dueDate !== null) return false;
+    return true;
+  }
+
+  // ❗ From here onward → only cards WITH dates
+  if (!card.dueDate) return false;
+
+  const due = new Date(card.dueDate);
+
+  // ✅ Case 2: Overdue
+  if (filters.dueDate === "overdue") {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // remove time
+
+  const due = new Date(card.dueDate);
+  due.setHours(0, 0, 0, 0);   // remove time
+
+  if (due >= today) return false;
+}
+
+  // ✅ Case 3: Next day
+  if (filters.dueDate === "day") {
+    const tomorrow = new Date();
+    tomorrow.setDate(now.getDate() + 1);
+
+    if (due < now || due > tomorrow) return false;
+  }
+
+  // ✅ Case 4: Next week
+  if (filters.dueDate === "week") {
+    const week = new Date();
+    week.setDate(now.getDate() + 7);
+
+    if (due < now || due > week) return false;
+  }
+}
+    // STATUS
+if (filters.status) {
+  const isCompleted =
+  card.ChecklistItems &&
+  card.ChecklistItems.length > 0 &&
+  card.ChecklistItems.every((item) => item.completed == 1);
+
+  if (filters.status === "complete" && !isCompleted) return false;
+  if (filters.status === "incomplete" && isCompleted) return false;
+}
+
+    return true;
+  });
+};
   if (!board) return <div>Loading...</div>;
 
   return (
     <div className="app">
       <Topbar
         onSearch={handleSearch}
-        onOpenFilter={() => setShowFilter(true)}
+        onOpenFilter={() => setShowFilter(prev => !prev)}
       />
 
       <div className="main">
@@ -163,10 +230,17 @@ function Board() {
       </div>
 
       <FilterPanel
-        show={showFilter}
-        onClose={() => setShowFilter(false)}
-        setFilters={setFilters}
-      />
+  show={showFilter}
+  onClose={() => setShowFilter(false)}
+  filters={filters}
+  setFilters={setFilters}
+  labels={
+  board?.Lists?.flatMap(list =>
+    list.Cards.flatMap(card => card.Labels || [])
+  ) || []
+}  // TEMP (replace later with real data)
+  members={[]}  // TEMP
+/>
     </div>
   );
 }

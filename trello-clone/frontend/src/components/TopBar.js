@@ -2,7 +2,6 @@ import { useState } from "react";
 
 function Topbar({ onSearch, onOpenFilter }) {
   const [value, setValue] = useState("");
-
   return (
     <div className="topbar">
       <div className="logo">Trackly</div>
@@ -18,8 +17,12 @@ function Topbar({ onSearch, onOpenFilter }) {
       />
 
       <div className="topbar-actions">
-        <button onClick={onOpenFilter}>Filter</button>
-        <div className="profile">S</div>
+        <button className="filter-btn" onClick={onOpenFilter}>
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+        <div className="profile">A</div>
       </div>
     </div>
   );

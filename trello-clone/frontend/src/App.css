@@ -29,17 +29,18 @@ body {
 
 .logo {
   font-weight: bold;
-  font-size: 18px;
+  font-size: 30px;
 }
 
 /* SEARCH */
 .search {
-  width: 400px;
+  width: 800px;
   padding: 8px;
   border-radius: 8px;
   border: none;
   background: #1e293b;
   color: white;
+  
 }
 
 /* PROFILE */
@@ -61,13 +62,35 @@ body {
   gap: 12px;
 }
 
+
+/* filter button */
 .topbar button {
   padding: 6px 12px;
   border-radius: 6px;
   border: none;
-  background: #334155;
+  background: #4f73a5;
   color: white;
   cursor: pointer;
+}
+.filter-btn {
+  width: 40px;
+  height: 30px;
+  background: #4f73a5;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.filter-btn span {
+  width: 18px;
+  height: 2px;
+  background: white;
+  border-radius: 2px;
 }
 
 /* MAIN */
@@ -211,10 +234,82 @@ body {
 /* FILTER */
 .filter-panel {
   position: fixed;
-  right: 0;
   top: 55px;
-  width: 300px;
-  height: 100%;
-  background: #0f172a;
+  right: 0;
+  width: 320px;
+  height: calc(100vh - 55px);
+  background: #2c2f36;
+  color: #e4e6eb;
   padding: 16px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: -4px 0 10px rgba(0,0,0,0.4);
+}
+
+/* HEADER */
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.filter-header h3 {
+  margin: 0;
+}
+
+/* INPUT */
+.filter-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background: #1f2937;
+  color: white;
+  margin-bottom: 8px;
+}
+
+/* DESCRIPTION */
+.filter-desc {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-bottom: 16px;
+}
+
+/* SECTION */
+.filter-section {
+  margin-top: 16px;
+}
+
+.filter-section h4 {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #b0b3b8;
+}
+
+/* ROW */
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+.filter-row input {
+  cursor: pointer;
+}
+
+/* LABEL COLOR */
+.label-box {
+  flex: 1;
+  height: 28px;              /* 🔥 makes it visible */
+  border-radius: 6px;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
 }

@@ -1,12 +1,31 @@
-const { Board, List, Card } = require("../models");
+const { Board, List, Card,Member,Label,ChecklistItem } = require("../models");
 
 exports.getBoard = async (req, res) => {
   try {
+    
+    // console.log(JSON.stringify(board, null, 2));
     const board = await Board.findOne({
       include: [
         {
           model: List,
-          include: [Card],
+          include: [
+            {
+              model: Card,
+              include: [
+                {
+                  model: Member,
+                  through: { attributes: [] }, // hide junction table
+                },
+                {
+                  model: Label,
+                  through: { attributes: [] },
+                },
+                {
+                  model: ChecklistItem
+                },
+              ],
+            },
+          ],
         },
       ],
       order: [
@@ -14,9 +33,10 @@ exports.getBoard = async (req, res) => {
         [List, Card, "position", "ASC"],
       ],
     });
-
+console.log(JSON.stringify(board, null, 2));
     res.json(board);
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: err.message });
   }
 };
