@@ -1,6 +1,6 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { Draggable } from "@hello-pangea/dnd";
-import CardModal from "./CardModal";
+// import CardModal from "./CardModal";
 
 function Card({ card, index ,onClick}) {
   // const [open, setOpen] = useState(false);

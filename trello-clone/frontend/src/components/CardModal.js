@@ -31,7 +31,7 @@ const [checklistText, setChecklistText] = useState("");
 
   useEffect(() => {
     fetchCard();
-  }, []);
+  }, [fetchCard]);
 
   const handleUpdate = async () => {
   await updateCard(cardId, {
@@ -285,7 +285,7 @@ const toggleLabel = async (labelId) => {
   const allDone =
     updatedCard.ChecklistItems &&
     updatedCard.ChecklistItems.length > 0 &&
-    updatedCard.ChecklistItems.every((i) => i.completed == 1);
+    updatedCard.ChecklistItems.every((i) => i.completed === 1);
 
   // 🔥 update main card completed state
   await updateCard(cardId, { completed: allDone });
