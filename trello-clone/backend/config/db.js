@@ -5,16 +5,11 @@ let sequelize;
 
 if (process.env.DB_URI) {
   // 🚀 Railway (production)
-  sequelize = new Sequelize(process.env.DB_URI, {
-    dialect: "mysql",
-    logging: false,
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
-    },
-  });
+  console.log(process.env.DB_URI);
+sequelize = new Sequelize(process.env.DB_URI, {
+  dialect: "mysql",
+  logging: false,
+});
 } else {
   // 💻 Local (development)
   sequelize = new Sequelize(
