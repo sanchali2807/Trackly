@@ -26,14 +26,23 @@ function Board() {
 });
 
   // FETCH
-  const fetchBoard = async () => {
+const fetchBoard = async () => {
+  try {
     const res = await getBoard();
+    console.log("BOARD DATA:", res.data); // 👈 ADD THIS
     setBoard(res.data);
-  };
+  } catch (err) {
+    console.error("ERROR FETCHING BOARD:", err); // 👈 ADD THIS
+  }
+};
 
   useEffect(() => {
     fetchBoard();
-  }, []);
+  const refresh = () => fetchBoard();
+
+  window.addEventListener("refreshBoard", refresh);
+  return () => window.removeEventListener("refreshBoard", refresh);
+}, []);
 
   useEffect(() => {
   if (board) {
@@ -178,56 +187,59 @@ if (filters.status) {
         onSearch={handleSearch}
         onOpenFilter={() => setShowFilter(prev => !prev)}
       />
+<DragDropContext onDragEnd={handleDragEnd}>
+  <div className="main">
+    
+    {/* ✅ Sidebar INSIDE context */}
+    {board && <Sidebar lists={board.Lists} />}
 
-      <div className="main">
-        <Sidebar />
-
-        <div className="content">
-          <div className="board-header">
-            <h2>{board.title}</h2>
-          </div>
-
-          <div className="board-wrapper">
-            <DragDropContext onDragEnd={handleDragEnd}>
-              <Droppable
-                droppableId="all-lists"
-                direction="horizontal"
-                type="LIST"
-              >
-                {(provided) => (
-                  <div
-                    className="board"
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                  >
-                    {board.Lists?.map((list, index) => {
-                      let cards = list.Cards;
-
-                      if (filteredCards) {
-                        cards = list.Cards.filter((c) =>
-                          filteredCards.some((fc) => fc.id === c.id)
-                        );
-                      }
-
-                      cards = applyFilters(cards);
-
-                      return (
-                        <List
-                          key={list.id}
-                          list={{ ...list, Cards: cards }}
-                          index={index}
-                        />
-                      );
-                    })}
-
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
-          </div>
-        </div>
+    <div className="content">
+      <div className="board-header">
+        <h2>{board.title}</h2>
       </div>
+
+      <div className="board-wrapper">
+        <Droppable
+          droppableId="all-lists"
+          direction="horizontal"
+          type="LIST"
+        >
+          {(provided) => (
+            <div
+              className="board"
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+            >
+              {board.Lists
+                ?.filter((list) => list.title !== "Inbox")
+                .map((list, index) => {
+                  let cards = list.Cards;
+
+                  if (filteredCards) {
+                    cards = list.Cards.filter((c) =>
+                      filteredCards.some((fc) => fc.id === c.id)
+                    );
+                  }
+
+                  cards = applyFilters(cards);
+
+                  return (
+                    <List
+                      key={list.id}
+                      list={{ ...list, Cards: cards }}
+                      index={index}
+                    />
+                  );
+                })}
+
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </div>
+    </div>
+  </div>
+</DragDropContext>
 
       <FilterPanel
   show={showFilter}

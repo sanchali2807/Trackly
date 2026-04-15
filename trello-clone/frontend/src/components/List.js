@@ -1,17 +1,26 @@
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 import Card from "./Card";
 import { createCard } from "../api/api";
+import { useState } from "react";
 
 function List({ list, index }) {
-  const handleAddCard = async () => {
-    await createCard({
-      title: "New Card",
-      listId: list.id,
-      position: list.Cards.length,
-    });
+  const [showInput, setShowInput] = useState(false);
+const [title, setTitle] = useState("");
 
-    window.location.reload(); // quick fix
-  };
+const handleAddCard = async () => {
+  if (!title.trim()) return;
+
+  await createCard({
+    title,
+    listId: list.id,
+    position: list.Cards.length,
+  });
+
+  setTitle("");
+  setShowInput(false);
+
+  window.dispatchEvent(new Event("refreshBoard"));
+};
 
   return (
     <Draggable draggableId={String(list.id)} index={index}>
@@ -34,9 +43,24 @@ function List({ list, index }) {
             )}
           </Droppable>
 
-          <button className="add-card" onClick={handleAddCard}>
-            + Add a card
-          </button>
+          {!showInput ? (
+  <div className="add-card" onClick={() => setShowInput(true)}>
+    + Add a card
+  </div>
+) : (
+  <div className="add-card-box">
+    <textarea
+      placeholder="Enter a title"
+      value={title}
+      onChange={(e) => setTitle(e.target.value)}
+    />
+
+    <div className="add-actions">
+      <button onClick={handleAddCard}>Add card</button>
+      <button onClick={() => setShowInput(false)}>Cancel</button>
+    </div>
+  </div>
+)}
         </div>
       )}
     </Draggable>

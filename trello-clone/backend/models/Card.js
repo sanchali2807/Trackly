@@ -16,6 +16,11 @@ const Card = sequelize.define("Card", {
   dueDate: {
     type: DataTypes.DATEONLY,
   },
+  completed :{
+    type : DataTypes.BOOLEAN,
+    defaultValue:false,
+    allowNull:true
+  }
 });
 
 module.exports = Card;

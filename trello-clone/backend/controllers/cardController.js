@@ -34,20 +34,25 @@ exports.createCard = async (req, res) => {
 exports.updateCard = async (req, res) => {
   try {
     const id = Number(req.params.id);
-    const { title, description, dueDate } = req.body;
+
+    const { title, description, dueDate, completed } = req.body;
 
     const card = await Card.findByPk(id);
     if (!card) {
       return res.status(404).json({ message: "Card not found" });
     }
-if (!title && !description && !dueDate) {
-      return res.status(400).json({
-        message: "At least one field (title, description, dueDate) must be provided",
-      });
-    }
-    await card.update({ title, description, dueDate });
 
-    res.json({ message: "Updated the card" });
+    // ✅ allow updating ANY field independently
+    const updatedData = {};
+
+    if (title !== undefined) updatedData.title = title;
+    if (description !== undefined) updatedData.description = description;
+    if (dueDate !== undefined) updatedData.dueDate = dueDate;
+    if (completed !== undefined) updatedData.completed = completed;
+
+    await card.update(updatedData);
+
+    res.json(card);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
