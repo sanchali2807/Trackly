@@ -169,10 +169,13 @@ if (filters.dueDate) {
 }
     // STATUS
 if (filters.status) {
-  const isCompleted =
+const checklistCompleted =
   card.ChecklistItems &&
   card.ChecklistItems.length > 0 &&
   card.ChecklistItems.every((item) => item.completed == 1);
+
+// ✅ FINAL LOGIC
+const isCompleted = card.completed || checklistCompleted;
 
   if (filters.status === "complete" && !isCompleted) return false;
   if (filters.status === "incomplete" && isCompleted) return false;

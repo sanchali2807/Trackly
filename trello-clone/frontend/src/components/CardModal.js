@@ -275,9 +275,25 @@ const toggleLabel = async (labelId) => {
       type="checkbox"
       checked={item.completed}
       onChange={async () => {
-        await toggleChecklistItem(item.id);
-        await fetchCard();
-      }}
+  await toggleChecklistItem(item.id);
+
+  // 🔥 fetch updated card
+  const res = await getCardDetails(cardId);
+  const updatedCard = res.data;
+
+  // ✅ check if all checklist items done
+  const allDone =
+    updatedCard.ChecklistItems &&
+    updatedCard.ChecklistItems.length > 0 &&
+    updatedCard.ChecklistItems.every((i) => i.completed == 1);
+
+  // 🔥 update main card completed state
+  await updateCard(cardId, { completed: allDone });
+
+  setCard(updatedCard);
+
+  window.dispatchEvent(new Event("refreshBoard"));
+}}
     />
 
     <span
