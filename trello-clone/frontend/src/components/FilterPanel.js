@@ -123,35 +123,34 @@ function FilterPanel({ show, onClose, filters, setFilters, labels, members }) {
     <div className="filter-section">
   <h4>Labels</h4>
 
-  {labels?.map((l) => (
-   <div className="filter-row" key={l.id}>
-  <input
-    type="checkbox"
-    checked={filters.labels.includes(l.id)}
-    onChange={() => {
-      setFilters((prev) => {
-        const exists = prev.labels.includes(l.id);
+  {Array.from(new Map(labels.map(l => [l.id, l])).values())
+    .map((l) => (
+      <div className="filter-row" key={l.id}>
+        <input
+          type="checkbox"
+          checked={filters.labels.includes(l.id)}
+          onChange={() => {
+            setFilters((prev) => {
+              const exists = prev.labels.includes(l.id);
 
-        return {
-          ...prev,
-          labels: exists
-            ? prev.labels.filter((id) => id !== l.id)
-            : [...prev.labels, l.id],
-        };
-      });
-    }}
-  />
+              return {
+                ...prev,
+                labels: exists
+                  ? prev.labels.filter((id) => id !== l.id)
+                  : [...prev.labels, l.id],
+              };
+            });
+          }}
+        />
 
-  <div
-    className="label-box"
-    style={{
-      backgroundColor: l.color,
-    }}
-  >
-    {l.name || ""}
-  </div>
-</div>
-  ))}
+        <div
+          className="label-box"
+          style={{ backgroundColor: l.color }}
+        >
+          {l.name || ""}
+        </div>
+      </div>
+    ))}
 </div>
 
     </div>

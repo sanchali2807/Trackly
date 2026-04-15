@@ -22,11 +22,11 @@ export const moveCard = (data) => API.put("/cards/move", data);
 export const getCardDetails = (id) => API.get(`/cards/${id}`);
 
 // LABELS
-export const addLabel = (data) =>
-  API.post("/cards/add-label", data);
+export const addLabel = (cardId, labelId) =>
+  API.post(`/cards/cards/${cardId}/labels/${labelId}`);
 
-export const removeLabel = (data) =>
-  API.post("/cards/remove-label", data);
+export const removeLabel = (cardId, labelId) =>
+  API.delete(`/cards/cards/${cardId}/labels/${labelId}`);
 export const getLabels = () => API.get("/meta/labels");
 
 //SEARCH

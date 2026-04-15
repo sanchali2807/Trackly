@@ -14,7 +14,7 @@ function CardModal({ cardId, onClose }) {
   const [isEditingDesc, setIsEditingDesc] = useState(false);
   const [showLabels, setShowLabels] = useState(false);
 const [isEditingTitle, setIsEditingTitle] = useState(false);
-
+const [search, setSearch] = useState("");
   const fetchCard = async () => {
     const res = await getCardDetails(cardId);
     const labelRes = await getLabels();
@@ -36,17 +36,22 @@ const [isEditingTitle, setIsEditingTitle] = useState(false);
   window.dispatchEvent(new Event("refreshBoard")); // ✅
   onClose();
 };
- 
-  const toggleLabel = async (labelId) => {
+const toggleLabel = async (labelId) => {
   const assigned = card.Labels?.some(l => l.id === labelId);
 
-  if (assigned) {
-    await removeLabel({ cardId, labelId });
-  } else {
-    await addLabel({ cardId, labelId });
-  }
+  try {
+    if (assigned) {
+      await removeLabel(cardId, labelId);
+    } else {
+      await addLabel(cardId, labelId);
+    }
 
-  fetchCard();
+    await fetchCard();
+    window.dispatchEvent(new Event("refreshBoard"));
+
+  } catch (err) {
+    console.error("Error toggling label:", err);
+  }
 };
   if (!card) return null;
 
@@ -125,34 +130,43 @@ const [isEditingTitle, setIsEditingTitle] = useState(false);
 {showLabels && (
   <div className="label-popup">
     <h4>Labels</h4>
+    <input placeholder="Search labels..." 
+    value={search}
+    onChange={(e)=>setSearch(e.target.value)}/>
 
-    <input placeholder="Search labels..." />
-
-    {labels.map((l) => (
+    {labels.filter((l) => 
+      l.name.toLowerCase().includes(search.toLowerCase())
+    )
+    .map((l)=>(
     <div
   key={l.id}
   className="label-option"
   onClick={() => toggleLabel(l.id)}
 >
+   <input
+    type="checkbox"
+    checked={card.Labels?.some(x => x.id === l.id)}
+    onChange={()=>toggleLabel(l.id)}
+  />
   <div
     className="label-color"
     style={{ background: l.color }}
   >
-    {l.name}
+    {/* {l.name} */}
   </div>
 
-  <input
+  {/* <input
     type="checkbox"
     checked={card.Labels?.some(x => x.id === l.id)}
     readOnly
-  />
+  /> */}
 </div>
     ))}
   </div>
 )}
 
       {/* DESCRIPTION */}
-    <div className="modal-section">
+  <div className="modal-section">
   <div className="section-header">
     <h3>Description</h3>
 
@@ -163,13 +177,20 @@ const [isEditingTitle, setIsEditingTitle] = useState(false);
 
   {/* VIEW MODE */}
   {!isEditingDesc && (
-    <p>{card.description || "Add a description..."}</p>
+    <p
+      className="desc-box"
+      onClick={() => setIsEditingDesc(true)}
+      style={{ cursor: "pointer", color: card.description ? "#e5e7eb" : "#9ca3af" }}
+    >
+      {card.description || "Add a description..."}
+    </p>
   )}
 
-  {/* EDIT MODE (like pic 3) */}
+  {/* EDIT MODE */}
   {isEditingDesc && (
     <div className="desc-editor">
       <textarea
+        autoFocus
         value={card.description || ""}
         onChange={(e) =>
           setCard({ ...card, description: e.target.value })
@@ -178,8 +199,10 @@ const [isEditingTitle, setIsEditingTitle] = useState(false);
 
       <div className="desc-actions">
         <button
-          onClick={() => {
+          onClick={async () => {
             setIsEditingDesc(false);
+            await updateCard(cardId, { description: card.description });
+            window.dispatchEvent(new Event("refreshBoard"));
           }}
         >
           Save
@@ -193,37 +216,11 @@ const [isEditingTitle, setIsEditingTitle] = useState(false);
   )}
 </div>
 
-      {/* LABELS DISPLAY */}
-      <div className="modal-section">
-        <h3>Labels</h3>
-
-        <div className="label-row">
-          {card.Labels?.map((l) => (
-            <span
-              key={l.id}
-              className="label-pill"
-              style={{ background: l.color }}
-            >
-              {l.name}
-            </span>
-          ))}
-        </div>
-
-        {/* SELECT LABELS */}
-        {/* {labels.map((l) => (
-          <div key={l.id}>
-            <input
-              type="checkbox"
-              checked={card.Labels?.some(x => x.id === l.id)}
-              onChange={() => toggleLabel(l.id)}
-            />
-            {l.name}
-          </div>
-        ))} */}
-      </div>
+    
 
       {/* DATE */}
       <div className="modal-section">
+        <h3>Due Date</h3>
         <input
           type="date"
           value={card.dueDate ? card.dueDate.split("T")[0] : ""}
