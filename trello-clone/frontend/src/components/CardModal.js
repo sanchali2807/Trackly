@@ -9,7 +9,7 @@ import {
   addMemberToCard,
   addChecklistItem,
   toggleChecklistItem,
-  deleteChecklistItem
+  // deleteChecklistItem
 } from "../api/api";
 
 function CardModal({ cardId, onClose }) {
