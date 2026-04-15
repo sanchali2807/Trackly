@@ -20,6 +20,8 @@ export const updateCard = (id, data) => API.put(`/cards/${id}`, data);
 export const deleteCard = (id) => API.delete(`/cards/${id}`);
 export const moveCard = (data) => API.put("/cards/move", data);
 export const getCardDetails = (id) => API.get(`/cards/${id}`);
+export const addMemberToCard = (cardId, memberId) =>
+  API.post("/cards/add-member", { cardId, memberId });
 
 // LABELS
 export const addLabel = (cardId, labelId) =>
@@ -33,6 +35,14 @@ export const getLabels = () => API.get("/meta/labels");
 export const searchCards = (query) =>
   API.get(`/search?query=${query}`);
 
+// CHECKLIST
+export const addChecklistItem = (cardId, text) =>
+  API.post("/checklist", { cardId, text });
 
+export const toggleChecklistItem = (id) =>
+  API.put(`/checklist/${id}`);
+
+export const deleteChecklistItem = (id) =>
+  API.delete(`/checklist/${id}`);
 
 export default API;

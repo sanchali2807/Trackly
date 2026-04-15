@@ -217,6 +217,7 @@ exports.getCardDetails = async (req, res) => {
 // ✅ ADD MEMBER
 exports.addMemberToCard = async (req, res) => {
   try {
+    console.log("BODY RECEIVED:", req.body); 
     let { cardId, memberId } = req.body;
 
     if (!cardId || !memberId) {

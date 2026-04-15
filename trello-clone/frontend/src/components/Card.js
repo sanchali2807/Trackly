@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Draggable } from "@hello-pangea/dnd";
 import CardModal from "./CardModal";
 
-function Card({ card, index }) {
-  const [open, setOpen] = useState(false);
+function Card({ card, index ,onClick}) {
+  // const [open, setOpen] = useState(false);
 
   return (
     <>
@@ -14,7 +14,8 @@ function Card({ card, index }) {
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
-            onClick={() => setOpen(true)}
+            onClick={() => onClick(card.id)}
+            // onClick={() => setOpen(true)}
           >
             <div className="labels">
               {card.Labels?.map((l) => (
@@ -47,12 +48,7 @@ function Card({ card, index }) {
         )}
       </Draggable>
 
-      {open && (
-        <CardModal
-          cardId={card.id}
-          onClose={() => setOpen(false)}
-        />
-      )}
+      
     </>
   );
 }

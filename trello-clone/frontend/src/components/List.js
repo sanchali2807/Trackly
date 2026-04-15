@@ -3,7 +3,7 @@ import Card from "./Card";
 import { createCard ,updateList} from "../api/api";
 import { useState } from "react";
 
-function List({ list, index }) {
+function List({ list, index ,onCardClick}) {
   const [showInput, setShowInput] = useState(false);
   const [title, setTitle] = useState("");
 
@@ -74,7 +74,12 @@ onKeyDown={async (e) => {
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
                 {list.Cards?.map((card, i) => (
-                  <Card key={card.id} card={card} index={i} />
+                  <Card
+  key={card.id}
+  card={card}
+  index={i}
+  onClick={onCardClick}
+/>
                 ))}
                 {provided.placeholder}
               </div>

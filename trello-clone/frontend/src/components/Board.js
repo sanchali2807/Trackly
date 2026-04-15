@@ -11,11 +11,13 @@ import List from "./List";
 import Topbar from "./TopBar";
 import Sidebar from "./SideBar";
 import FilterPanel from "./FilterPanel";
+import CardModal from "./CardModal";
 
 function Board() {
   const [board, setBoard] = useState(null);
   const [filteredCards, setFilteredCards] = useState(null);
   const [showFilter, setShowFilter] = useState(false);
+  const [selectedCardId, setSelectedCardId] = useState(null);
 
   const [filters, setFilters] = useState({
   keyword: "",
@@ -191,7 +193,9 @@ if (filters.status) {
   <div className="main">
     
     {/* ✅ Sidebar INSIDE context */}
-    {board && <Sidebar lists={board.Lists} />}
+    {board && <Sidebar lists={board.Lists}
+    onCardClick={(id) => setSelectedCardId(id)}
+    />}
 
     <div className="board-container">
   <div className="content">
@@ -225,11 +229,12 @@ if (filters.status) {
                   cards = applyFilters(cards);
 
                   return (
-                    <List
-                      key={list.id}
-                      list={{ ...list, Cards: cards }}
-                      index={index}
-                    />
+                   <List
+  key={list.id}
+  list={{ ...list, Cards: cards }}
+  index={index}
+  onCardClick={(id) => setSelectedCardId(id)}   // ✅ ADD THIS LINE
+/>
                   );
                 })}
 
@@ -255,8 +260,16 @@ if (filters.status) {
 }  // TEMP (replace later with real data)
   members={[]}  // TEMP
 />
+{selectedCardId && (
+  <CardModal
+    cardId={selectedCardId}
+    onClose={() => setSelectedCardId(null)}
+  />
+)}
     </div>
   );
+  
 }
+
 
 export default Board;

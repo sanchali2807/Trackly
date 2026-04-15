@@ -30,13 +30,11 @@ body {
 /* MAIN */
 .main {
   display: flex;
-
-  align-items: start;  /* 🔥 important */
+  align-items: stretch;
 }
 /* SIDEBAR */
 .sidebar {
   width: 260px;
-height: 616px;
  background: linear-gradient(
   180deg,
   hsl(222, 60%, 18%) 0%,
@@ -382,15 +380,16 @@ background: linear-gradient(
 /* FILTER */
 .filter-panel {
   position: fixed;
-  top: 55px;
-  right: 0;
-  width: 320px;
-  height: calc(100vh - 55px);
+  top: 70px;
+  right: 15px;
+  bottom: 10px;
+  width: 300px;
   background: #2c2f36;
   color: #e4e6eb;
   padding: 16px;
   overflow-y: auto;
   z-index: 1000;
+  border-radius: 20px;
   box-shadow: -4px 0 10px rgba(0,0,0,0.4);
 }
 
@@ -408,7 +407,7 @@ background: linear-gradient(
 
 /* INPUT */
 .filter-input {
-  width: 100%;
+  width: 90%;
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #555;
@@ -472,8 +471,8 @@ margin-left: 250px;
   display: grid;              
   place-items: center;    
 
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(6px);
+  /* background: rgba(0, 0, 0, 0.5); */
+  /* backdrop-filter: blur(6px); */
 
   z-index: 2000;
 }
@@ -853,4 +852,35 @@ padding: 3px;
   height: 2px;
   background: white;
   border-radius: 2px;
+}
+
+
+
+/* ITEM ROW */
+
+
+/* CHECKBOX */
+.checklist-left input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+margin-top: 10px;
+}
+
+/* TEXT */
+.checklist-text {
+  
+  font-size: 14px;
+}
+
+/* COMPLETED */
+.checklist-text.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+
+
+.checklist-delete:hover {
+  background: rgba(255,255,255,0.2);
 }

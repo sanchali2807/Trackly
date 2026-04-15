@@ -5,7 +5,11 @@ import {
   updateCard,
   getLabels,
   addLabel,
-  removeLabel
+  removeLabel,
+  addMemberToCard,
+  addChecklistItem,
+  toggleChecklistItem,
+  deleteChecklistItem
 } from "../api/api";
 
 function CardModal({ cardId, onClose }) {
@@ -15,6 +19,9 @@ function CardModal({ cardId, onClose }) {
   const [showLabels, setShowLabels] = useState(false);
 const [isEditingTitle, setIsEditingTitle] = useState(false);
 const [search, setSearch] = useState("");
+const [showChecklist, setShowChecklist] = useState(false);
+const [checklistText, setChecklistText] = useState("");
+
   const fetchCard = async () => {
     const res = await getCardDetails(cardId);
     const labelRes = await getLabels();
@@ -123,7 +130,25 @@ const toggleLabel = async (labelId) => {
     🏷 Labels
   </button>
   <button>📅 Dates</button>
-  <button>☑ Checklist</button>
+  <button onClick={() => setShowChecklist(!showChecklist)}>☑️Checklist</button>
+ <button
+  onClick={async () => {
+    console.log("CLICKED MEMBER BUTTON"); // 👈 MUST print
+
+    try {
+      await addMemberToCard(cardId, 1);
+      console.log("API CALLED");
+
+      await fetchCard();
+      window.dispatchEvent(new Event("refreshBoard"));
+
+    } catch (err) {
+      console.error("Error adding member:", err);
+    }
+  }}
+>
+  🙎🏻‍♂️ Member
+</button>
 
   
 </div>
@@ -216,7 +241,58 @@ const toggleLabel = async (labelId) => {
   )}
 </div>
 
-    
+    {showChecklist && (
+  <div className="modal-section">
+    <h3>Checklist</h3>
+
+    {/* Add item */}
+    <div style={{ display: "flex", gap: "10px" }}>
+      <input
+        value={checklistText}
+        onChange={(e) => setChecklistText(e.target.value)}
+        placeholder="Add item..."
+      />
+      <button
+        onClick={async () => {
+          if (!checklistText) return;
+
+          await addChecklistItem(cardId, checklistText);
+          setChecklistText("");
+          await fetchCard();
+        }}
+      >
+        Add
+      </button>
+    </div>
+
+    {/* Items */}
+    {card.ChecklistItems?.map((item) => (
+     <div key={item.id} className="checklist-item">
+
+  {/* LEFT SIDE */}
+  <div className="checklist-left">
+    <input
+      type="checkbox"
+      checked={item.completed}
+      onChange={async () => {
+        await toggleChecklistItem(item.id);
+        await fetchCard();
+      }}
+    />
+
+    <span
+      className={`checklist-text ${item.completed ? "completed" : ""}`}
+    >
+      {item.text}
+    </span>
+  </div>
+
+ 
+
+</div>
+    ))}
+  </div>
+)}
 
       {/* DATE */}
       <div className="modal-section">

@@ -3,7 +3,7 @@ import { createCard } from "../api/api";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 import Card from "./Card"; // 🔥 IMPORTANT
 
-function Sidebar({ lists }) {
+function Sidebar({ lists ,onCardClick}) {
   const [showInput, setShowInput] = useState(false);
   const [title, setTitle] = useState("");
 
@@ -54,14 +54,17 @@ function Sidebar({ lists }) {
                 index={index}
               >
                 {(provided) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                  >
-                    {/* 🔥 USE SAME CARD COMPONENT */}
-                    <Card card={card} />
-                  </div>
+                 <div
+  ref={provided.innerRef}
+  {...provided.draggableProps}
+  {...provided.dragHandleProps}
+>
+  <Card 
+  card={card} 
+  index={index}
+  onClick={onCardClick} 
+/>
+</div>
                 )}
               </Draggable>
             ))}
