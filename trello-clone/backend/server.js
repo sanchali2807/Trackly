@@ -15,7 +15,7 @@ async function startServer() {
       console.log(`Loaded model: ${model}`);
     });
 console.log(sequelize.models);
-    await sequelize.sync();
+    // await sequelize.sync();
     console.log("✅ Tables created");
 
     app.listen(PORT, () => {
