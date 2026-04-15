@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useCallback } from "react";
 
 import {
   getCardDetails,
@@ -22,16 +22,16 @@ const [search, setSearch] = useState("");
 const [showChecklist, setShowChecklist] = useState(false);
 const [checklistText, setChecklistText] = useState("");
 
-  const fetchCard = async () => {
-    const res = await getCardDetails(cardId);
-    const labelRes = await getLabels();
-    setCard(res.data);
-    setLabels(labelRes.data);
-  };
+  const fetchCard = useCallback(async () => {
+  const res = await getCardDetails(cardId);
+  const labelRes = await getLabels();
+  setCard(res.data);
+  setLabels(labelRes.data);
+}, [cardId]);
 
   useEffect(() => {
     fetchCard();
-  }, []);
+  }, [fetchCard]);
 
   const handleUpdate = async () => {
   await updateCard(cardId, {
