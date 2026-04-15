@@ -21,6 +21,11 @@ const Card = sequelize.define("Card", {
     defaultValue:false,
     allowNull:true
   }
-});
+},
+{
+    tableName: "cards",       // ✅ FIXED
+    freezeTableName: true,    // ✅ prevents pluralization
+  }
+);
 
 module.exports = Card;

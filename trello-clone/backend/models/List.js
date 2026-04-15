@@ -10,6 +10,10 @@ const List = sequelize.define("List", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-});
+},
+{
+    tableName: "Lists",       // ✅ FIXED
+    freezeTableName: true,    // ✅ prevents pluralization
+  });
 
 module.exports = List;

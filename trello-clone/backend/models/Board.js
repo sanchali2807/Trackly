@@ -7,6 +7,10 @@ const Board = sequelize.define("Board", {
     allowNull: false,
     defaultValue: "My Board",
   },
-});
+},
+{
+    tableName: "Boards",       // ✅ FIXED
+    freezeTableName: true,    // ✅ prevents pluralization
+  });
 
 module.exports = Board;

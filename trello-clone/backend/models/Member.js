@@ -6,6 +6,10 @@ const Member = sequelize.define("Member", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-});
+},
+{
+    tableName: "Members",       // ✅ FIXED
+    freezeTableName: true,    // ✅ prevents pluralization
+  });
 
 module.exports = Member;

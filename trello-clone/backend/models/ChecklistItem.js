@@ -10,6 +10,11 @@ const ChecklistItem = sequelize.define("ChecklistItem", {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
-});
+},
+  {
+    tableName: "CheckListItems",       // ✅ FIXED
+    freezeTableName: true,    // ✅ prevents pluralization
+  }
+);
 
 module.exports = ChecklistItem;

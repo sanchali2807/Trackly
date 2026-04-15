@@ -8,6 +8,10 @@ const Label = sequelize.define("Label", {
   color: {
     type: DataTypes.STRING,
   },
-});
+},
+{
+    tableName: "Labels",       // ✅ FIXED
+    freezeTableName: true,    // ✅ prevents pluralization
+  });
 
 module.exports = Label;
