@@ -1,26 +1,29 @@
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 import Card from "./Card";
-import { createCard } from "../api/api";
+import { createCard ,updateList} from "../api/api";
 import { useState } from "react";
 
 function List({ list, index }) {
   const [showInput, setShowInput] = useState(false);
-const [title, setTitle] = useState("");
+  const [title, setTitle] = useState("");
 
-const handleAddCard = async () => {
-  if (!title.trim()) return;
+  const [isEditing, setIsEditing] = useState(false);
+  const [newTitle, setNewTitle] = useState(list.title);
 
-  await createCard({
-    title,
-    listId: list.id,
-    position: list.Cards.length,
-  });
+  const handleAddCard = async () => {
+    if (!title.trim()) return;
 
-  setTitle("");
-  setShowInput(false);
+    await createCard({
+      title,
+      listId: list.id,
+      position: list.Cards.length,
+    });
 
-  window.dispatchEvent(new Event("refreshBoard"));
-};
+    setTitle("");
+    setShowInput(false);
+
+    window.dispatchEvent(new Event("refreshBoard"));
+  };
 
   return (
     <Draggable draggableId={String(list.id)} index={index}>
@@ -30,8 +33,43 @@ const handleAddCard = async () => {
           ref={provided.innerRef}
           {...provided.draggableProps}
         >
-          <h3 {...provided.dragHandleProps}>{list.title}</h3>
+          {/* LIST HEADER */}
+          <div className="list-header" {...provided.dragHandleProps}>
+            {!isEditing ? (
+              <h3 onClick={() => setIsEditing(true)}>
+                {newTitle}
+              </h3>
+            ) : (
+              <input
+                className="list-title-input"
+                value={newTitle}
+                autoFocus
+                onChange={(e) => setNewTitle(e.target.value)}
+                onBlur={async () => {
+  setIsEditing(false);
 
+  await updateList(list.id, {
+    title: newTitle,
+  });
+
+  window.dispatchEvent(new Event("refreshBoard"));
+}}
+onKeyDown={async (e) => {
+  if (e.key === "Enter") {
+    setIsEditing(false);
+
+    await updateList(list.id, {
+      title: newTitle,
+    });
+
+    window.dispatchEvent(new Event("refreshBoard"));
+  }
+}}
+              />
+            )}
+          </div>
+
+          {/* CARDS */}
           <Droppable droppableId={String(list.id)} type="CARD">
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
@@ -43,24 +81,25 @@ const handleAddCard = async () => {
             )}
           </Droppable>
 
+          {/* ADD CARD */}
           {!showInput ? (
-  <div className="add-card" onClick={() => setShowInput(true)}>
-    + Add a card
-  </div>
-) : (
-  <div className="add-card-box">
-    <textarea
-      placeholder="Enter a title"
-      value={title}
-      onChange={(e) => setTitle(e.target.value)}
-    />
+            <div className="add-card" onClick={() => setShowInput(true)}>
+              + Add a card
+            </div>
+          ) : (
+            <div className="add-card-box">
+              <textarea
+                placeholder="Enter a title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
 
-    <div className="add-actions">
-      <button onClick={handleAddCard}>Add card</button>
-      <button onClick={() => setShowInput(false)}>Cancel</button>
-    </div>
-  </div>
-)}
+              <div className="add-actions">
+                <button onClick={handleAddCard}>Add card</button>
+                <button onClick={() => setShowInput(false)}>Cancel</button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </Draggable>

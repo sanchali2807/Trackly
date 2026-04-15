@@ -1,7 +1,17 @@
 :root {
   --bg-dark: #0b1120;
   --sidebar: #172554;
-  --board-bg: #6b4fa3;
+
+  /* NEW */
+  --header-bg: #5b4b8a;   /* same for Inbox + My Board */
+ .content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  background: transparent;   /* 🔥 IMPORTANT */
+}
+
   --list-bg: #1f2937;
   --card-bg: #374151;
   --text: #e5e7eb;
@@ -96,18 +106,39 @@ body {
 /* MAIN */
 .main {
   display: flex;
-  height: calc(100vh - 55px);
-}
 
+  align-items: start;  /* 🔥 important */
+}
 /* SIDEBAR */
 .sidebar {
   width: 260px;
-  background: var(--sidebar);
+height: 616px;
+ background: linear-gradient(
+  180deg,
+  hsl(222, 60%, 18%) 0%,
+  hsl(222, 55%, 14%) 100%
+);
+ backdrop-filter: blur(10px);
   padding: 16px;
+
+  border-radius: 20px;
+
+  /* height: fit-content;      🔥 KEY FIX */
+  /* align-self: flex-start;   🔥 prevents stretch */
+}
+.sidebar {
+  margin: 16px 10px;   /* top/bottom spacing */
 }
 
 .sidebar h3 {
-  margin-bottom: 20px;
+  margin: 0 0 16px 0;
+
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.345);
+  backdrop-filter: blur(6px);
+
+  border-radius: 10px;
+  
 }
 
 .sidebar button {
@@ -116,9 +147,12 @@ body {
   padding: 10px;
   border-radius: 8px;
   border: none;
-  background: #1e293b;
+  background: rgba(255, 255, 255, 0.06);
   color: white;
   cursor: pointer;
+}
+.sidebar button:hover {
+  background: rgba(255, 255, 255, 0.12);
 }
 .sidebar-add {
   margin-top: 10px;
@@ -200,9 +234,11 @@ body {
 }
 
 .sidebar-card {
-  background: #374151;
+   background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  backdrop-filter: blur(4px);
   padding: 8px;
-  border-radius: 6px;
+  
   margin-bottom: 6px;
   font-size: 14px;
   color: #fff;
@@ -212,14 +248,20 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: var(--board-bg);
+
+  background: var(--board-gradient);
 }
 
 /* BOARD HEADER */
 .board-header {
-  padding: 16px 20px;
-  font-size: 20px;
-  font-weight: bold;
+  height: 60px;                  /* FIXED height */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 20px;
+
+  background: #5b4b8a;
 }
 
 /* BOARD */
@@ -235,9 +277,61 @@ body {
   min-width: max-content;
 }
 
+.board-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: hsla(250, 78%, 21%, 0.25);
+
+  pointer-events: none;
+}
+.board-container {
+  flex: 1;
+
+  margin: 16px 16px 16px 0;   /* spacing from sidebar */
+
+  border-radius: 20px;
+  overflow: hidden;
+
+background: linear-gradient(
+    130deg,
+    hsl(250, 63%, 35%) 0%,
+    hsl(310, 33%, 39%) 40%,
+    hsl(306, 27%, 57%) 100%
+  );
+  position: relative;
+
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4); /* 🔥 depth */
+}
+.board-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(255, 255, 255, 0.12),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(0,0,0,0.3),
+      transparent 50%
+    );
+
+  pointer-events: none;
+}
+.board-wrapper,
+.board {
+  position: relative;
+  z-index: 1;
+}
 /* LIST */
 .list {
-  background: var(--list-bg);
+   background: var(--list-bg);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
   width: 280px;
   border-radius: 14px;
   padding: 12px;
@@ -246,6 +340,7 @@ body {
 /* CARD */
 .card {
   background: var(--card-bg);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
   padding: 12px;
   border-radius: 10px;
   margin-bottom: 12px;
@@ -677,4 +772,34 @@ body {
 
   color: #f1f2f4;
   outline: none;
+}
+
+/* list name edit */
+.list-header {
+  display: flex;
+  align-items: center;
+}
+
+.list-header h3 {
+  margin-top: 3px;
+  margin-bottom: 20px;
+  margin-left: 2px;
+  line-height: 1;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.list-title-input {
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+
+  background: transparent;
+  border: 1px solid #579dff;
+  border-radius: 6px;
+
+  color: white;
+  padding: 4px 10px;
+  outline: none;
+  margin-bottom: 10px;
 }

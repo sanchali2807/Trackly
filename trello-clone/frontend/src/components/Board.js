@@ -193,7 +193,8 @@ if (filters.status) {
     {/* ✅ Sidebar INSIDE context */}
     {board && <Sidebar lists={board.Lists} />}
 
-    <div className="content">
+    <div className="board-container">
+  <div className="content">
       <div className="board-header">
         <h2>{board.title}</h2>
       </div>
@@ -237,6 +238,7 @@ if (filters.status) {
           )}
         </Droppable>
       </div>
+    </div>
     </div>
   </div>
 </DragDropContext>
