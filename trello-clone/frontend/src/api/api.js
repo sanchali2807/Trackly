@@ -1,9 +1,11 @@
 import axios from "axios";
 
+
 const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: process.env.REACT_APP_API_URL || "http://localhost:5100",
 });
 
+console.log("API URL:", process.env.REACT_APP_API_URL );
 // BOARD
 export const getBoard = () => API.get("/board");
 

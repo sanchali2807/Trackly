@@ -284,7 +284,7 @@ const toggleLabel = async (labelId) => {
   const allDone =
     updatedCard.ChecklistItems &&
     updatedCard.ChecklistItems.length > 0 &&
-    updatedCard.ChecklistItems.every((i) => i.completed == 1);
+    updatedCard.ChecklistItems.every((i) =>Boolean(i.completed));
 
   // 🔥 update main card completed state
   await updateCard(cardId, { completed: allDone });

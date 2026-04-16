@@ -3,7 +3,8 @@ const { ChecklistItem } = require("../models");
 exports.addItem = async (req, res) => {
   try {
     const { cardId, text } = req.body;
-
+console.log("BODY:", req.body);
+console.log("TYPES:", typeof cardId, typeof text);
     if (!cardId || !text) {
       return res.status(400).json({ error: "cardId and text required" });
     }
@@ -12,7 +13,8 @@ exports.addItem = async (req, res) => {
 
     res.json(item);
   } catch (error) {
-    res.status(500).json({ error: "Server Error" });
+    console.error("CHECKLIST ERROR:", error);
+  res.status(500).json({ error: error.message });
   }
 };
 
