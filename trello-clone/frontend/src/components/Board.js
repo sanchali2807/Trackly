@@ -18,7 +18,7 @@ function Board() {
   const [filteredCards, setFilteredCards] = useState(null);
   const [showFilter, setShowFilter] = useState(false);
   const [selectedCardId, setSelectedCardId] = useState(null);
-const [sidebarOpen, setSidebarOpen] = useState(false);
+// const [sidebarOpen, setSidebarOpen] = useState(false);
   const [filters, setFilters] = useState({
   keyword: "",
   dueDate: null,     // single
@@ -198,7 +198,6 @@ const isCompleted = card.completed || checklistCompleted;
     {/* ✅ Sidebar INSIDE context */}
     {board && <Sidebar lists={board.Lists}
     onCardClick={(id) => setSelectedCardId(id)}
-    isOpen={sidebarOpen}
     />}
 
     <div className="board-container">
