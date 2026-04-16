@@ -9,7 +9,14 @@ const checklistRoutes = require("./routes/checklistRoutes");
 const metaRoutes = require("./routes/metaRoutes");
 const searchRoutes = require("./routes/searchRoutes");
 
-app.use(cors());
+// app.use(cors());
+app.use(cors({
+  origin: [
+    "http://localhost:3000",
+    "https://trackly-lime.vercel.app"
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 app.use((req, res, next) => {
