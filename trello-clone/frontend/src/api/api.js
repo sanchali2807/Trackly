@@ -27,10 +27,10 @@ export const addMemberToCard = (cardId, memberId) =>
 
 // LABELS
 export const addLabel = (cardId, labelId) =>
-  API.post(`/cards/cards/${cardId}/labels/${labelId}`);
+  API.post(`/cards/${cardId}/labels/${labelId}`);
 
 export const removeLabel = (cardId, labelId) =>
-  API.delete(`/cards/cards/${cardId}/labels/${labelId}`);
+  API.delete(`/cards/${cardId}/labels/${labelId}`);
 export const getLabels = () => API.get("/meta/labels");
 
 //SEARCH
