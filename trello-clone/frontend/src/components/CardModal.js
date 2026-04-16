@@ -125,7 +125,6 @@ const toggleLabel = async (labelId) => {
 
       {/* ACTION BUTTONS */}
      <div className="modal-actions">
-  <button>+ Add</button>
   <button onClick={() => setShowLabels(!showLabels)}>
     🏷 Labels
   </button>
