@@ -36,14 +36,14 @@ require("dotenv").config();
 
 let sequelize;
 
-if (process.env.MYSQL_URL) {
-  // 🚀 Railway
-  console.log("Using Railway DB");
+if (process.env.MYSQL_PUBLIC_URL) {
+  console.log("Using Railway PUBLIC DB");
 
-  sequelize = new Sequelize(process.env.MYSQL_URL, {
+  sequelize = new Sequelize(process.env.MYSQL_PUBLIC_URL, {
     dialect: "mysql",
     logging: false,
   });
+}
 
 } else {
   // 💻 Local
