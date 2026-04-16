@@ -45,7 +45,7 @@ if (process.env.MYSQL_PUBLIC_URL) {
   });
 }
 
-} else {
+ else {
   // 💻 Local
   console.log("Using Local DB");
 
