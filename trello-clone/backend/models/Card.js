@@ -23,7 +23,7 @@ const Card = sequelize.define("Card", {
   }
 },
 {
-    tableName: "Cards",       // ✅ FIXED
+    tableName: "cards",       // ✅ FIXED
     freezeTableName: true,    // ✅ prevents pluralization
   }
 );
