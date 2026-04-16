@@ -1,70 +1,86 @@
-# Getting Started with Create React App
+🧠 Overview
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a Trello-inspired task management application that allows users to organize their work using boards, lists, and cards.
+The project demonstrates a complete full-stack workflow including:
+Frontend UI
+Backend APIs
+Database operations
+Deployment
 
-## Available Scripts
 
-In the project directory, you can run:
+🌐 Live Demo
+🔗 Frontend (Vercel): (https://trackly-lime.vercel.app/)
+🔗 Backend (Railway): trackly-production-53ee.up.railway.app/api
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+🛠️ Tech Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Frontend
+React (Create React App)
+CSS (custom styling)
+Axios (API calls)
+Drag & Drop library
 
-### `npm test`
+Backend
+Node.js
+Express.js
+Database
+SQL (Sequelize ORM)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Deployment
 
-### `npm run build`
+Vercel (Frontend)
+Railway (Backend and Database)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+⚙️ Features
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+📌 Create and manage lists (To Do, In Progress, Done)
+📝 Add, edit, delete cards
+🔄 Drag and drop cards between lists
+📅 Optional due dates for tasks
+📡 Backend API integration
+🌐 Fully deployed (no local setup needed for demo)
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+🏗️ Project Structure
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+frontend/   → React UI
+backend/    → Express server + APIs
+database/   → Models & relations
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+🔄 Application Flow
 
-## Learn More
+User interacts with UI (React)
+API request is sent to backend
+Backend processes request via Express
+Sequelize interacts with database
+Response is returned
+UI updates dynamically
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+⚙️ Local Setup (Optional)
 
-### Code Splitting
+If you want to run locally:
+Backend
+cd backend
+npm install
+npm run dev
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Frontend
+cd frontend
+npm install
+npm start
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+🔑 Key Concepts Learned
+REST API design
+Component-based architecture
+State management in React
+Database relationships (List → Cards)
+Deployment pipeline (Frontend + Backend separation)
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+👩‍💻 Author
+Developed as part of a full-stack learning project.
