@@ -6,6 +6,10 @@ let sequelize;
 if (process.env.DB_URI) {
   // 🚀 Railway (production)
   console.log(process.env.DB_URI);
+  console.log("DB CONFIG:", {
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+});
 sequelize = new Sequelize(process.env.DB_URI, {
   dialect: "mysql",
   logging: false,

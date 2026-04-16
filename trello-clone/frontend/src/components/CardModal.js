@@ -251,15 +251,25 @@ const toggleLabel = async (labelId) => {
         onChange={(e) => setChecklistText(e.target.value)}
         placeholder="Add item..."
       />
-      <button
-        onClick={async () => {
-          if (!checklistText) return;
+     <button
+  onClick={async () => {
+    if (!checklistText) return;
 
-          await addChecklistItem(cardId, checklistText);
-          setChecklistText("");
-          await fetchCard();
-        }}
-      >
+    console.log("Checklist Debug →", {
+      cardId,
+      type: typeof cardId,
+      text: checklistText,
+    });
+
+    try {
+      await addChecklistItem(cardId, checklistText);
+      setChecklistText("");
+      await fetchCard();
+    } catch (err) {
+      console.error("Checklist Error:", err.response?.data || err.message);
+    }
+  }}
+>
         Add
       </button>
     </div>
