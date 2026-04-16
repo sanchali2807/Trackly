@@ -172,7 +172,7 @@ if (filters.status) {
 const checklistCompleted =
   card.ChecklistItems &&
   card.ChecklistItems.length > 0 &&
-  card.ChecklistItems.every((item) => item.completed === 1);
+  card.ChecklistItems.every((item) => item.completed == 1);
 
 // ✅ FINAL LOGIC
 const isCompleted = card.completed || checklistCompleted;

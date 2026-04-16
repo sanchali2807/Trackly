@@ -129,7 +129,6 @@ const toggleLabel = async (labelId) => {
   <button onClick={() => setShowLabels(!showLabels)}>
     🏷 Labels
   </button>
-  <button>📅 Dates</button>
   <button onClick={() => setShowChecklist(!showChecklist)}>☑️Checklist</button>
  <button
   onClick={async () => {
